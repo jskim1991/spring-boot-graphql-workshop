@@ -1,4 +1,4 @@
-Introduction to GraphQL
+## Introduction to GraphQL
 
 What is GraphQL?
 - Query language for API developed by Meta
@@ -6,18 +6,36 @@ What is GraphQL?
 - Supports query, mutation, and subscription
 - Allows clients to request only the data they need
 
-GraphQL vs REST
-
 GraphQL Disadvantages
 - Requires a library
 - may not be worth it for simple CRUD operations
 - difficult to cache due to `POST` requests
 
-Definining a GraphQL schema
+## Database Schema
+```sql
+CREATE TABLE IF NOT EXISTS stories (
+    id SERIAL PRIMARY KEY,
+    title TEXT NOT NULL,
+    description TEXT NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS comments (
+    id SERIAL PRIMARY KEY,
+    story_id INTEGER NOT NULL REFERENCES stories(id) ON DELETE CASCADE,
+    content TEXT NOT NULL
+);
+```
+
+## GraphQL schema
 - Create a `schema.graphqls` file under `src/main/resources`
 ```graphql
 type Query {
     stories: [Story]
+}
+
+type Mutation {
+    createStory(input: CreateStoryRequest): Story!
+    createComment(input: CreateCommentRequest): Comment!
 }
 
 type Story {
@@ -25,6 +43,7 @@ type Story {
     title: String!
     description: String!
     comments: [Comment]
+    labels: [String]
 }
 
 type Comment {
@@ -32,9 +51,28 @@ type Comment {
     storyId: ID!
     content: String!
 }
+
+input CreateStoryRequest {
+    title: String!
+    description: String!
+}
+
+input CreateCommentRequest {
+    storyId: ID!
+    content: String!
+}
 ```
 
+## Demo
+- Rest API approach with selective fields
+- QueryMapping
+- SchemaMapping
+- BatchMapping
+- Batch Loader and Data loader
+- Asynchronous Batch Loading
+- MutationMapping
 
+### Client Query and Mutation
 ```graphql
 query stories {
   stories {
