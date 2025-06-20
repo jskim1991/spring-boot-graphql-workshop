@@ -1,0 +1,32 @@
+type Query {
+    stories: [Story]
+}
+
+type Mutation {
+    createStory(input: CreateStoryRequest): Story!
+    createComment(input: CreateCommentRequest): Comment!
+}
+
+type Story {
+    id: ID!
+    title: String!
+    description: String!
+    comments: [Comment]
+    labels: [String]
+}
+
+type Comment {
+    id: ID!
+    storyId: ID!
+    content: String!
+}
+
+input CreateStoryRequest {
+    title: String!
+    description: String!
+}
+
+input CreateCommentRequest {
+    storyId: ID!
+    content: String!
+}
