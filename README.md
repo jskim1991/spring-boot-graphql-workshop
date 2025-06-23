@@ -11,7 +11,7 @@
 - Both make a request via URL and return JSON
 
 ### Differences from REST
-|                   | REST                                                                                           | GraphQL                                                                                                                  |
+| Aspect            | REST                                                                                           | GraphQL                                                                                                                  |
 |-------------------|:-----------------------------------------------------------------------------------------------|:-------------------------------------------------------------------------------------------------------------------------|
 | Data Fetching     | Resource-centric (/users, /products) and multiple endpoints per resource (/users, /users/{id}) | Single endpoint for querying all data                                                                                    |
 | Over-fetching     | Must fetch full payloads even if only a few fields are needed (entire payload)                 | Avoided - clients request exactly what they need                                                                         |
@@ -79,7 +79,7 @@ INSERT INTO STORIES (title, description) VALUES
     ('User can export entire project', '');
 
 INSERT INTO COMMENTS (story_id, content) VALUES
-    (1, 'IPN notes'),
+    (1, 'IPM notes'),
     (1, 'Story accepted'),
     (2, 'What about story history?'),
     (2, 'What about the CSV file content?');
