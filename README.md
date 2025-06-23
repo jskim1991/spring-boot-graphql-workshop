@@ -86,7 +86,7 @@ INSERT INTO COMMENTS (story_id, content) VALUES
 ```
 
 ### GraphQL schema
-- Create a `schema.graphqls` file under `src/main/resources`
+- Create a `schema.graphqls` file under `src/main/resources/graphql`
 ```graphql
 type Query {
     stories: [Story]
