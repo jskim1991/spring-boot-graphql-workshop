@@ -58,7 +58,7 @@ class StoryGraphQLController(
     /* version 1 */
 //    @SchemaMapping(typeName = "Story", field = "comments")
 //    fun comments(story: Story): List<Comment> {
-//        println("fetching comments for story id: ${story.id}")
+//        logger.info("fetching comments for story id: ${story.id}")
 //        return commentRepository.findAllByStoryIdIn(listOf(story.id))
 //    }
 

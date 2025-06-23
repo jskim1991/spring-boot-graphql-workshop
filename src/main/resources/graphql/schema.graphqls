@@ -12,7 +12,6 @@ type Story {
     title: String!
     description: String!
     comments: [Comment]
-    labels: [String]
 }
 
 type Comment {

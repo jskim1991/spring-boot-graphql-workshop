@@ -1,17 +1,62 @@
 ## Introduction to GraphQL
 
-What is GraphQL?
+### What is GraphQL?
 - Query language for API developed by Meta
 - Provides schema and types of the data in the API
-- Supports query, mutation, and subscription
+- Supports query (read), mutation (write), and subscription (real-time updates)
 - Allows clients to request only the data they need
 
-GraphQL Disadvantages
-- Requires a library
-- may not be worth it for simple CRUD operations
-- difficult to cache due to `POST` requests
+### Similarities with REST
+- Both are used for client-server communication over HTTP
+- Both make a request via URL and return JSON
 
-## Database Schema
+### Differences from REST
+|                   | REST                                                                                           | GraphQL                                                                                                                  |
+|-------------------|:-----------------------------------------------------------------------------------------------|:-------------------------------------------------------------------------------------------------------------------------|
+| Data Fetching     | Resource-centric (/users, /products) and multiple endpoints per resource (/users, /users/{id}) | Single endpoint for querying all data                                                                                    |
+| Over-fetching     | Must fetch full payloads even if only a few fields are needed (entire payload)                 | Avoided - clients request exactly what they need                                                                         |
+| Under-fetching    | Multiple endpoints need to be aggregated or composite endpoint is needed                       | Avoided - clients request exactly what they need and GraphQL resolvers allow the backend to automatically aggregate data |
+| Typed Schema      | No built-in schema definition - requires documentation                                         | Schema is strongly typed and validation support is provided                                                              |
+| Real-time Support | Requires manual setup of WebSocket                                                             | Built-in subscription support for real-time data                                                                         |
+
+
+
+## Demo
+### Table of Contents
+- Rest API approach
+- QueryMapping
+- SchemaMapping
+- BatchMapping
+- Batch Loader and Data loader
+- Asynchronous Batch Loading
+- MutationMapping
+
+### Goal of Demo
+The goal of this demo is to showcase how to use GraphQL with Spring Boot to create a simple API that allows users to create and fetch stories and comments.
+```json
+{
+  "stories": [
+    {
+      "id": 1,
+      "title": "Learning GraphQL",
+      "description": "Demo using Spring Boot",
+      "comments": [
+        {
+          "id": 1,
+          "content": "This is a great demo!"
+        },
+        {
+          "id": 2,
+          "content": "I love GraphQL!"
+        }
+      ]
+    }
+  ]
+}
+```
+
+### Database Schema
+- Create `schema.sql` file under `src/main/resources`
 ```sql
 CREATE TABLE IF NOT EXISTS stories (
     id SERIAL PRIMARY KEY,
@@ -26,7 +71,21 @@ CREATE TABLE IF NOT EXISTS comments (
 );
 ```
 
-## GraphQL schema
+### Sample Data
+- Create `data.sql` file under `src/main/resources`
+```sql
+INSERT INTO STORIES (title, description) VALUES
+    ('User can login', 'Users can login with Google Account'),
+    ('User can export entire project', '');
+
+INSERT INTO COMMENTS (story_id, content) VALUES
+    (1, 'IPN notes'),
+    (1, 'Story accepted'),
+    (2, 'What about story history?'),
+    (2, 'What about the CSV file content?');
+```
+
+### GraphQL schema
 - Create a `schema.graphqls` file under `src/main/resources`
 ```graphql
 type Query {
@@ -43,7 +102,6 @@ type Story {
     title: String!
     description: String!
     comments: [Comment]
-    labels: [String]
 }
 
 type Comment {
@@ -63,15 +121,6 @@ input CreateCommentRequest {
 }
 ```
 
-## Demo
-- Rest API approach with selective fields
-- QueryMapping
-- SchemaMapping
-- BatchMapping
-- Batch Loader and Data loader
-- Asynchronous Batch Loading
-- MutationMapping
-
 ### Client Query and Mutation
 ```graphql
 query stories {
@@ -83,7 +132,6 @@ query stories {
       id
       content
     }
-    labels
   }
 }
 
